@@ -74,7 +74,7 @@ window.app = (function($) {
         var el = $(
             '<div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">' +
-                    f + '<span class="caret"></span>' +
+                    f + ' <span class="caret"></span>' +
                 '</button>' +
                 '<ul class="dropdown-menu" role="menu">' +
                 '</ul>' +
@@ -183,7 +183,9 @@ window.app = (function($) {
                 icon: lineSymbol,
                 offset: '100%'
             }],
-            map: app.map
+            map: app.map,
+            strokeColor: "#575757",
+            strokeWeight: 1
         });
         return line;
     };
