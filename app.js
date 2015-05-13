@@ -32,9 +32,9 @@ window.app = (function($) {
 
     app.load_data = function(){
         // var url = 'https://data.pr.gov/resource/admit.json?$app_token=wNItlTM01zprvFa8K62Tu3LJj';
-        var url = '/sample-data.json';
+        var url = 'sample-data.json';
 
-        $.get('/recintos.json', function(recintos) {
+        $.get('recintos.json', function(recintos) {
             app.recintos = recintos;
 
             $.get(url, function(data){
