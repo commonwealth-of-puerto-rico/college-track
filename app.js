@@ -1,5 +1,5 @@
 
-window.app = (function($, map){
+window.app = (function($) {
     var API_KEY = ' wNItlTM01zprvFa8K62Tu3LJj';
     var app = {};
 
@@ -33,11 +33,17 @@ window.app = (function($, map){
     app.load_data = function(){
         // var url = 'https://data.pr.gov/resource/admit.json?$app_token=wNItlTM01zprvFa8K62Tu3LJj';
         var url = '/sample-data.json';
-        $.get(url, function(data){
-            app.set_data(data);
+        
+        $.get('/recintos.json', function(recintos) {
+            app.recintos = recintos;
+            
+            $.get(url, function(data){
+                app.set_data(data);
+            });
         });
     };
-    app.set_data = function(data){
+    
+    app.set_data = function(data) {
         app.data = data;
 
         get_field_values(data, [
@@ -51,7 +57,7 @@ window.app = (function($, map){
         ], app.fields={});
         app.make_filters();
 
-        app.apply_data(app.data);
+        app.drawData(app.data);
     };
 
     app.make_filters = function(){
@@ -95,7 +101,7 @@ window.app = (function($, map){
         if(!ignore){
             var filtered = app.filter_data(app.data, app.filters);
             app.clear_map(app.data);
-            app.apply_data(filtered);
+            app.drawData(filtered);
         }
     };
 
@@ -112,12 +118,15 @@ window.app = (function($, map){
         return filtered;
     };
 
-
-    app.apply_data = function(data){
-        data.forEach(app.add_item.bind(app));
+    app.drawData = function(data) {
+        data.forEach(app.addHighSchoolMaker.bind(app));
+        
+        console.log(Object.keys(app.recintos));
+        
+        Object.keys(app.recintos).forEach(app.addUprMarker.bind(app));
     };
 
-    app.clear_map = function(data){
+    app.clear_map = function(item) {
         for(var i=0, e=data.length; i < e; ++i){
             if(data[i].marker){
                 data[i].marker.setMap(null);
@@ -126,16 +135,31 @@ window.app = (function($, map){
         }
     };
 
-    app.add_item = function(item){
+    app.addHighSchoolMaker = function(item) {
         item.marker = new google.maps.Marker({
             position: item.location = new google.maps.LatLng(+item.location_1.latitude, +item.location_1.longitude),
             map: app.map,
-            icon: 'green4.png',
-            title: 'Hello World!'
+            title: item.institucion_de_procedencia,
+            icon: {
+                anchor: new google.maps.Point(0,0),
+                url: 'green4.png',
+            },
         });
-    }
-
-
+    };
+    
+    app.addUprMarker = function(id) {
+        var item = app.recintos[id];
+        item.marker = new google.maps.Marker({
+            position: item.location = new google.maps.LatLng(item.lat, item.lon),
+            map: app.map,
+            title: item.name,
+            // icon: {
+            //     anchor: new google.maps.Point(0,0),
+            //     url: 'green4.png',
+            // },
+        });
+    };
+    
     return app;
 
 
