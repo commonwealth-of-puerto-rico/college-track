@@ -23,9 +23,12 @@
                     },
                 };
                 var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+                window.app.init(map);
             }
             google.maps.event.addDomListener(window, 'load', initialize);
         </script>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="app.js"></script>
     </head>
     <body>
         <div id="map-canvas"></div>
