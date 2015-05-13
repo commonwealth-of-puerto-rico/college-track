@@ -141,8 +141,8 @@ window.app = (function($) {
             map: app.map,
             title: item.institucion_de_procedencia,
             icon: {
-                anchor: new google.maps.Point(0,0),
-                url: 'green4.png',
+                anchor: new google.maps.Point(16,16),
+                url: '/img/green4.png',
             },
         });
     };
@@ -153,10 +153,30 @@ window.app = (function($) {
             position: item.location = new google.maps.LatLng(item.lat, item.lon),
             map: app.map,
             title: item.name,
-            // icon: {
-            //     anchor: new google.maps.Point(0,0),
-            //     url: 'green4.png',
-            // },
+            icon: {
+                anchor: new google.maps.Point(16,16),
+                url: '/img/torre2.png',
+            },
+        });
+    };
+    
+    app.addArrow = function(hs, upr) {
+        var lineSymbol = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+        };
+
+        var lineCoordinates = [
+            new google.maps.LatLng(hs.lat, hs.lon),
+            new google.maps.LatLng(upr.lat, upr.lon)
+        ];
+
+        var line = new google.maps.Polyline({
+            path: lineCoordinates,
+            icons: [{
+                icon: lineSymbol,
+                offset: '100%'
+            }],
+            map: app.map
         });
     };
     
