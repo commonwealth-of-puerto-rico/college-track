@@ -53,15 +53,7 @@ window.app = (function($, map){
     };
 
     app.apply_data = function(data){
-        var mlat=0, mlon=0;
-        for(var i=0, e=data.length; i < e; ++i){
-            mlat += +data[i].location_1.latitude;
-            mlon += +data[i].location_1.longitude;
-        }
-        console.log(mlat, mlon);
-
         data.forEach(app.add_item.bind(app));
-        app.map.setCenter(new google.maps.LatLng(mlat/data.length, mlon/data.length));
     };
 
     app.clear_map = function(item){
