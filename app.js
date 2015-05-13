@@ -33,16 +33,16 @@ window.app = (function($) {
     app.load_data = function(){
         // var url = 'https://data.pr.gov/resource/admit.json?$app_token=wNItlTM01zprvFa8K62Tu3LJj';
         var url = '/sample-data.json';
-        
+
         $.get('/recintos.json', function(recintos) {
             app.recintos = recintos;
-            
+
             $.get(url, function(data){
                 app.set_data(data);
             });
         });
     };
-    
+
     app.set_data = function(data) {
         app.data = data;
 
@@ -120,13 +120,13 @@ window.app = (function($) {
 
     app.drawData = function(data) {
         data.forEach(app.addHighSchoolMaker.bind(app));
-        
+
         console.log(Object.keys(app.recintos));
-        
+
         Object.keys(app.recintos).forEach(app.addUprMarker.bind(app));
     };
 
-    app.clear_map = function(item) {
+    app.clear_map = function(data) {
         for(var i=0, e=data.length; i < e; ++i){
             if(data[i].marker){
                 data[i].marker.setMap(null);
@@ -145,8 +145,11 @@ window.app = (function($) {
                 url: '/img/green4.png',
             },
         });
+        app.addArrow({
+            lat: +item.location_1.latitude, lon:+item.location_1.longitude
+        }, app.recintos[item.campus]);
     };
-    
+
     app.addUprMarker = function(id) {
         var item = app.recintos[id];
         item.marker = new google.maps.Marker({
@@ -159,7 +162,7 @@ window.app = (function($) {
             },
         });
     };
-    
+
     app.addArrow = function(hs, upr) {
         var lineSymbol = {
             path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
@@ -179,7 +182,7 @@ window.app = (function($) {
             map: app.map
         });
     };
-    
+
     return app;
 
 
