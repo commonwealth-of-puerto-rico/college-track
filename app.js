@@ -146,7 +146,7 @@ window.app = (function($) {
             title: item.institucion_de_procedencia,
             icon: {
                 anchor: new google.maps.Point(16,16),
-                url: '/img/green4.png',
+                url: 'img/green4.png',
             },
         });
         item.arrow = app.addArrow({
@@ -162,7 +162,7 @@ window.app = (function($) {
             title: item.name,
             icon: {
                 anchor: new google.maps.Point(16,16),
-                url: '/img/torre2.png',
+                url: 'img/torre2.png',
             },
         });
     };
