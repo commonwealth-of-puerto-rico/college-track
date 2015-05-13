@@ -24,8 +24,9 @@ window.app = (function($, map){
         return f;
     };
 
-    app.init = function(map){
+    app.init = function(map, filters_toolbar){
         app.map = map;
+        app.filters_toolbar = $(filters_toolbar);
         app.load_data();
     };
 
@@ -48,15 +49,75 @@ window.app = (function($, map){
             "institucion_de_procedencia",
             "campus",
         ], app.fields={});
+        app.make_filters();
 
         app.apply_data(app.data);
     };
+
+    app.make_filters = function(){
+        app.filters={};
+        app.filters_toolbar.empty();
+        for(var f in app.fields){
+            app.filters_toolbar.append(app.make_filter_ctrl(f));
+        }
+        app.filters_toolbar.removeClass('hidden');
+    };
+
+    app.make_filter_ctrl = function(f){
+        var vals = app.fields[f];
+        var el = $(
+            '<div class="btn-group">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">' +
+                    f + '<span class="caret"></span>' +
+                '</button>' +
+                '<ul class="dropdown-menu" role="menu">' +
+                '</ul>' +
+            '</div>'
+        );
+        el.find('.dropdown-menu').click(function(e){if($(this).is(':visible')){e.stopPropagation();}});
+        var dd = el.find('.dropdown-menu');
+        vals.forEach(function(value){
+            app.set_filter(f, value, true, true);
+            var item=$('<li></li>').append(
+                $('<label></label>').append(
+                    $('<input type="checkbox" checked="checked" />').change(function(){
+                        app.set_filter(f, value, $(this).is(':checked'));
+                    })
+                ).append(value)
+            ).appendTo(dd);
+        });
+        return el;
+    };
+
+    app.set_filter = function(filter, value, checked, ignore){
+        if(!app.filters[filter]){app.filters[filter]={};}
+        app.filters[filter][value] = checked;
+        if(!ignore){
+            var filtered = app.filter_data(app.data, app.filters);
+            app.clear_map(app.data);
+            app.apply_data(filtered);
+        }
+    };
+
+    app.filter_data = function(data, filters){
+        var filtered = data.filter(function(item){
+            for(var f in filters){
+                var filter = filters[f];
+                if(filter && !filter[item[f]]){
+                    return false;
+                }
+            }
+            return true;
+        });
+        return filtered;
+    };
+
 
     app.apply_data = function(data){
         data.forEach(app.add_item.bind(app));
     };
 
-    app.clear_map = function(item){
+    app.clear_map = function(data){
         for(var i=0, e=data.length; i < e; ++i){
             if(data[i].marker){
                 data[i].marker.setMap(null);
