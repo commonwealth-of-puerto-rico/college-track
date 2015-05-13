@@ -33,10 +33,13 @@ window.app = (function($, map){
         item.marker = new google.maps.Marker({
             position: item.location = new google.maps.LatLng(+item.location_1.latitude, +item.location_1.longitude),
             map: app.map,
+            icon: 'green4.png',
             title: 'Hello World!'
         });
     }
 
+
     return app;
+
 
 })($);
