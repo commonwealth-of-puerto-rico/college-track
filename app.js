@@ -119,11 +119,11 @@ window.app = (function($) {
     };
 
     app.drawData = function(data) {
+        Object.keys(app.recintos).forEach(app.addUprMarker.bind(app));
         data.forEach(app.addHighSchoolMaker.bind(app));
 
-        console.log(Object.keys(app.recintos));
+        // console.log(Object.keys(app.recintos));
 
-        Object.keys(app.recintos).forEach(app.addUprMarker.bind(app));
     };
 
     app.clear_map = function(data) {
@@ -131,6 +131,10 @@ window.app = (function($) {
             if(data[i].marker){
                 data[i].marker.setMap(null);
                 data[i].marker = null;
+            }
+            if(data[i].arrow){
+                data[i].arrow.setMap(null);
+                data[i].arrow = null;
             }
         }
     };
@@ -145,7 +149,7 @@ window.app = (function($) {
                 url: '/img/green4.png',
             },
         });
-        app.addArrow({
+        item.arrow = app.addArrow({
             lat: +item.location_1.latitude, lon:+item.location_1.longitude
         }, app.recintos[item.campus]);
     };
@@ -181,6 +185,7 @@ window.app = (function($) {
             }],
             map: app.map
         });
+        return line;
     };
 
     return app;
